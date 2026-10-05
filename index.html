@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CVC Pro">
@@ -44,7 +44,7 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
     background: var(--bg); color: var(--text);
-    padding-bottom: calc(72px + var(--safe-bottom));
+    padding-bottom: calc(64px + var(--safe-bottom));
     font-size: 14px; line-height: 1.4;
   }
   .app { max-width: 500px; margin: 0 auto; padding: 0 12px; }
@@ -71,7 +71,8 @@
     overflow: hidden;
   }
   .brand-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 7px; display: block; }
-  .brand-text h1 { font-size: 14px; font-weight: 700; }
+  .brand-text h1 { font-size: 14px; font-weight: 700; display: flex; align-items: baseline; gap: 6px; }
+  .brand-version { font-size: 9.5px; font-weight: 600; color: var(--text-mute); background: var(--card); border: 1px solid var(--border-soft); padding: 1px 5px; border-radius: 4px; letter-spacing: 0.3px; }
   .brand-text p { font-size: 10.5px; color: var(--text-dim); margin-top: 1px; }
   .top-actions { display: flex; gap: 6px; }
   .icon-btn { width: 34px; height: 34px; border-radius: 9px; background: var(--card); border: 1px solid var(--border); color: var(--text-dim); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
@@ -142,16 +143,18 @@
   .empty svg { width: 36px; height: 36px; stroke: var(--text-mute); margin: 0 auto 10px; opacity: 0.6; }
   .empty p { font-size: 13px; color: var(--text-dim); }
 
-  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-2); border-top: 1px solid var(--border); padding: 6px 8px calc(6px + var(--safe-bottom)); display: flex; justify-content: space-around; z-index: 100; max-width: 500px; margin: 0 auto; }
-  .nav-btn { background: none; border: none; color: var(--text-mute); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; cursor: pointer; font-family: inherit; flex: 1; }
+  /* ===== BOTTOM NAV OPTIMISÉE iPHONE ===== */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-2); border-top: 1px solid var(--border); padding: 4px 8px calc(4px + var(--safe-bottom)); display: flex; justify-content: space-around; align-items: center; z-index: 100; max-width: 500px; margin: 0 auto; }
+  .nav-btn { background: none; border: none; color: var(--text-mute); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 4px; cursor: pointer; font-family: inherit; flex: 1; min-height: 44px; }
   .nav-btn.active { color: var(--accent); }
   .nav-btn svg { width: 18px; height: 18px; }
-  .nav-lbl { font-size: 9.5px; font-weight: 600; }
-  .nav-btn.center svg { background: var(--accent); border-radius: 8px; padding: 8px; width: 34px; height: 34px; stroke: white; stroke-width: 2.2; margin-top: -10px; }
+  .nav-lbl { font-size: 9px; font-weight: 600; margin-top: 1px; }
+  .nav-btn.center svg { background: var(--accent); border-radius: 8px; padding: 6px; width: 30px; height: 30px; stroke: white; stroke-width: 2.2; margin-top: 0; transition: transform 0.15s; }
+  .nav-btn.center:active svg { transform: scale(0.9); }
 
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
   .overlay.show { opacity: 1; pointer-events: auto; }
-  .sheet { position: fixed; left: 0; right: 0; bottom: 0; background: var(--bg); border-radius: 18px 18px 0 0; padding: 16px 16px calc(24px + var(--safe-bottom)); max-height: 92vh; overflow-y: auto; z-index: 201; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); max-width: 500px; margin: 0 auto; border-top: 1px solid var(--border); }
+  .sheet { position: fixed; left: 0; right: 0; bottom: 0; background: var(--bg); border-radius: 18px 18px 0 0; padding: 16px 16px calc(24px + var(--safe-bottom)); max-height: 92vh; overflow-y: auto; z-index: 201; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); max-width: 500px; margin: 0 auto; border-top: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
   .sheet.show { transform: translateY(0); }
   .sheet-handle { width: 32px; height: 3px; background: var(--border); border-radius: 2px; margin: 0 auto 14px; }
   .sheet h2 { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
@@ -286,7 +289,14 @@
   .timeline-dot.done { background: var(--success); }
   .timeline-body { flex: 1; min-width: 0; }
 
-  .filters { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; margin-bottom: 4px; }
+  /* ===== FILTRES AVEC FADE ===== */
+  .filters-wrap { position: relative; margin-bottom: 4px; }
+  .filters-wrap::after {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 10px; width: 32px;
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .filters { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; padding-right: 24px; scrollbar-width: none; }
   .filters::-webkit-scrollbar { display: none; }
   .chip { padding: 6px 11px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; color: var(--text-dim); font-size: 11.5px; font-weight: 600; white-space: nowrap; cursor: pointer; font-family: inherit; flex-shrink: 0; }
   .chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
@@ -335,13 +345,13 @@
       <div class="brand">
         <div class="brand-logo"><img src="logo.png" alt="Logo"></div>
         <div class="brand-text">
-          <h1>CVC Pro</h1>
+          <h1>CVC Pro <span class="brand-version">v12.1</span></h1>
           <p id="hello">Bonjour</p>
         </div>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><svg><use href="#i-moon"/></svg></button>
-        <button class="icon-btn" onclick="openSettings()"><svg><use href="#i-settings"/></svg></button>
+        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Changer de thème"><svg><use href="#i-moon"/></svg></button>
+        <button class="icon-btn" onclick="openSettings()" aria-label="Réglages"><svg><use href="#i-settings"/></svg></button>
       </div>
     </div>
 
@@ -354,7 +364,7 @@
 
     <div class="search-wrap">
       <svg><use href="#i-search"/></svg>
-      <input type="text" id="homeSearch" placeholder="Rechercher un client...">
+      <input type="text" id="homeSearch" placeholder="Rechercher un client..." aria-label="Rechercher un client">
     </div>
 
     <div class="sec-header"><h2>Mes clients</h2><span class="count" id="clientCount">0</span></div>
@@ -363,7 +373,7 @@
 
   <div class="view" id="view-today">
     <div class="topnav">
-      <button class="back-btn" onclick="go('home')"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="go('home')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2>Aujourd'hui</h2>
     </div>
     <div id="todayContent"></div>
@@ -371,16 +381,16 @@
 
   <div class="view" id="view-client">
     <div class="topnav">
-      <button class="back-btn" onclick="go('home')"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="go('home')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2 id="clientTitle">Client</h2>
-      <button class="fav-btn" id="clientFavBtn" onclick="toggleFavClient()"><svg><use href="#i-star"/></svg></button>
+      <button class="fav-btn" id="clientFavBtn" onclick="toggleFavClient()" aria-label="Favori"><svg><use href="#i-star"/></svg></button>
     </div>
     <div id="clientContent"></div>
   </div>
 
   <div class="view" id="view-interv">
     <div class="topnav">
-      <button class="back-btn" onclick="backFromInterv()"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="backFromInterv()" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2 id="intervTitle">—</h2>
     </div>
     <div id="intervContent"></div>
@@ -388,20 +398,20 @@
 
   <div class="view" id="view-docs">
     <div class="topnav">
-      <button class="back-btn" onclick="go('home')"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="go('home')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2>Documentation</h2>
     </div>
     <div class="search-wrap">
       <svg><use href="#i-search"/></svg>
-      <input type="text" id="docSearch" placeholder="Symptôme, code erreur...">
+      <input type="text" id="docSearch" placeholder="Symptôme, code erreur..." aria-label="Rechercher dans la documentation">
     </div>
-    <div class="filters" id="docFilters"></div>
+    <div class="filters-wrap"><div class="filters" id="docFilters"></div></div>
     <div class="docs-grid" id="docsGrid"></div>
   </div>
 
   <div class="view" id="view-doc">
     <div class="topnav">
-      <button class="back-btn" onclick="go('docs')"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="go('docs')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2 id="docTitle">—</h2>
     </div>
     <div class="doc-detail" id="docContent"></div>
@@ -409,16 +419,20 @@
 
   <div class="view" id="view-stock">
     <div class="topnav">
-      <button class="back-btn" onclick="go('home')"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="go('home')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2>Stock pièces</h2>
-      <button class="icon-btn" onclick="openAddStock()"><svg><use href="#i-plus"/></svg></button>
+      <button class="icon-btn" onclick="openAddStock()" aria-label="Ajouter au stock"><svg><use href="#i-plus"/></svg></button>
+    </div>
+    <div class="search-wrap">
+      <svg><use href="#i-search"/></svg>
+      <input type="text" id="stockSearch" placeholder="Rechercher une pièce..." aria-label="Rechercher dans le stock">
     </div>
     <div id="stockContent"></div>
   </div>
 
   <div class="view" id="view-stats">
     <div class="topnav">
-      <button class="back-btn" onclick="go('home')"><svg><use href="#i-back"/></svg></button>
+      <button class="back-btn" onclick="go('home')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2>Statistiques</h2>
     </div>
     <div id="statsContent"></div>
@@ -426,19 +440,19 @@
 </div>
 
 <div class="bottom-nav">
-  <button class="nav-btn active" data-view="home" onclick="go('home')">
+  <button class="nav-btn active" data-view="home" onclick="go('home')" aria-label="Clients">
     <svg><use href="#i-user"/></svg><span class="nav-lbl">Clients</span>
   </button>
-  <button class="nav-btn" data-view="today" onclick="goToday()">
+  <button class="nav-btn" data-view="today" onclick="goToday()" aria-label="Jour">
     <svg><use href="#i-clock"/></svg><span class="nav-lbl">Jour</span>
   </button>
-  <button class="nav-btn center" onclick="openNewIntervention()">
+  <button class="nav-btn center" onclick="openNewIntervention()" aria-label="Nouvelle intervention">
     <svg><use href="#i-plus"/></svg><span class="nav-lbl">Interv.</span>
   </button>
-  <button class="nav-btn" data-view="docs" onclick="goDocs()">
+  <button class="nav-btn" data-view="docs" onclick="goDocs()" aria-label="Documentation">
     <svg><use href="#i-info"/></svg><span class="nav-lbl">Docs</span>
   </button>
-  <button class="nav-btn" data-view="stock" onclick="goStock()">
+  <button class="nav-btn" data-view="stock" onclick="goStock()" aria-label="Stock">
     <svg><use href="#i-package"/></svg><span class="nav-lbl">Stock</span>
   </button>
 </div>
@@ -470,7 +484,7 @@
       <label>Description / Symptômes</label>
       <div class="field-textarea-wrap">
         <textarea id="fDesc"></textarea>
-        <button type="button" class="voice-btn" onclick="toggleVoice('fDesc', this)"><svg><use href="#i-mic"/></svg></button>
+        <button type="button" class="voice-btn" onclick="toggleVoice('fDesc', this)" aria-label="Dicter"><svg><use href="#i-mic"/></svg></button>
       </div>
     </div>
     <button type="submit" class="btn success">Démarrer l'intervention</button>
@@ -497,7 +511,7 @@
       <label>Description</label>
       <div class="field-textarea-wrap">
         <textarea id="eDesc"></textarea>
-        <button type="button" class="voice-btn" onclick="toggleVoice('eDesc', this)"><svg><use href="#i-mic"/></svg></button>
+        <button type="button" class="voice-btn" onclick="toggleVoice('eDesc', this)" aria-label="Dicter"><svg><use href="#i-mic"/></svg></button>
       </div>
     </div>
     <div class="btn-row">
@@ -542,7 +556,7 @@
     <label>Description</label>
     <div class="field-textarea-wrap">
       <textarea id="aDesc"></textarea>
-      <button type="button" class="voice-btn" onclick="toggleVoice('aDesc', this)"><svg><use href="#i-mic"/></svg></button>
+      <button type="button" class="voice-btn" onclick="toggleVoice('aDesc', this)" aria-label="Dicter"><svg><use href="#i-mic"/></svg></button>
     </div>
   </div>
   <div class="field">
@@ -605,7 +619,7 @@
   </div>
   <div class="panel">
     <h3>À propos</h3>
-    <p style="font-size:12px;color:var(--text-dim)">CVC Pro v12 — Version simplifiée.<br>Données stockées localement.</p>
+    <p style="font-size:12px;color:var(--text-dim)">CVC Pro v12.1 — Version simplifiée.<br>Données stockées localement.</p>
   </div>
 </div>
 
@@ -672,6 +686,34 @@ window.addEventListener('error', e => {
 window.addEventListener('unhandledrejection', e => {
   showError('Promise: ' + (e.reason?.message || e.reason));
 });
+
+// ============================================================
+// ===== VERSION =====
+// ============================================================
+const APP_VERSION = 'v12.1';
+
+// ============================================================
+// ===== SCROLL LOCK iOS =====
+// ============================================================
+let _scrollLockY = 0;
+function lockBodyScroll() {
+  _scrollLockY = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = 'fixed';
+  document.body.style.top = -_scrollLockY + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+  document.body.style.overflow = 'hidden';
+}
+function unlockBodyScroll() {
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  document.body.style.overflow = '';
+  window.scrollTo(0, _scrollLockY);
+}
 
 // ============================================================
 // ===== INDEXEDDB =====
@@ -911,12 +953,12 @@ function confirmAction(title, msg, cb, okLabel = 'Confirmer') {
   confirmCb = cb;
   document.getElementById('confirmOverlay').classList.add('show');
   document.getElementById('confirmModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  lockBodyScroll();
 }
 function closeConfirm() {
   document.getElementById('confirmOverlay').classList.remove('show');
   document.getElementById('confirmModal').classList.remove('show');
-  document.body.style.overflow = '';
+  unlockBodyScroll();
   confirmCb = null;
 }
 document.getElementById('confirmOk').addEventListener('click', () => {
@@ -944,12 +986,12 @@ function goStats() { closeSheets(); go('stats'); renderStats(); }
 function closeSheets() {
   document.getElementById('overlay').classList.remove('show');
   document.querySelectorAll('.sheet').forEach(s => s.classList.remove('show'));
-  document.body.style.overflow = '';
+  unlockBodyScroll();
 }
 function openSheet(id) {
   document.getElementById('overlay').classList.add('show');
   document.getElementById(id).classList.add('show');
-  document.body.style.overflow = 'hidden';
+  lockBodyScroll();
 }
 
 // ============================================================
@@ -970,9 +1012,11 @@ function toggleTheme() {
 }
 
 // ============================================================
-// ===== INDEX =====
+// ===== INDEX (avec cache) =====
 // ============================================================
+let _idxCache = null;
 function buildIndex() {
+  if (_idxCache) return _idxCache;
   const idx = {};
   interventions.forEach(i => {
     const name = i.client;
@@ -1006,8 +1050,10 @@ function buildIndex() {
       equipments: new Set(), pieces: [], anomalies: []
     };
   });
+  _idxCache = idx;
   return idx;
 }
+function invalidateIndex() { _idxCache = null; }
 
 // ============================================================
 // ===== RENDER HOME =====
@@ -1020,7 +1066,8 @@ function renderHome() {
   if (q) clients = clients.filter(c =>
     c.name.toLowerCase().includes(q) ||
     (c.address || '').toLowerCase().includes(q) ||
-    (c.phone || '').replace(/\s/g, '').includes(q.replace(/\s/g, ''))
+    (c.phone || '').replace(/\s/g, '').includes(q.replace(/\s/g, '')) ||
+    Array.from(c.equipments || []).some(e => (e || '').toLowerCase().includes(q))
   );
   clients.sort((a,b) => {
     if (a.enCours !== b.enCours) return b.enCours - a.enCours;
@@ -1114,10 +1161,10 @@ function intervCard(i) {
       (i.timeSpent ? '<span>⏱ ' + fmtDurShort(i.timeSpent) + '</span>' : '') +
     '</div>' +
     '<div class="card-actions">' +
-      (i.phone ? '<button class="action-btn call" data-act="call"><svg><use href="#i-phone"/></svg></button>' : '') +
-      (i.address ? '<button class="action-btn" data-act="gps"><svg><use href="#i-map"/></svg></button>' : '') +
-      '<button class="action-btn ' + (done ? '' : 'success') + '" data-act="toggle"><svg><use href="#i-' + (done ? 'undo' : 'check') + '"/></svg></button>' +
-      '<button class="action-btn danger" data-act="del"><svg><use href="#i-trash"/></svg></button>' +
+      (i.phone ? '<button class="action-btn call" data-act="call" aria-label="Appeler"><svg><use href="#i-phone"/></svg></button>' : '') +
+      (i.address ? '<button class="action-btn" data-act="gps" aria-label="Ouvrir dans Plans"><svg><use href="#i-map"/></svg></button>' : '') +
+      '<button class="action-btn ' + (done ? '' : 'success') + '" data-act="toggle" aria-label="' + (done ? 'Rouvrir' : 'Terminer') + '"><svg><use href="#i-' + (done ? 'undo' : 'check') + '"/></svg></button>' +
+      '<button class="action-btn danger" data-act="del" aria-label="Supprimer"><svg><use href="#i-trash"/></svg></button>' +
     '</div>' +
   '</div>';
 }
@@ -1171,6 +1218,7 @@ document.getElementById('intervContent').addEventListener('click', e => {
 });
 
 document.getElementById('docSearch').addEventListener('input', debounce(renderDocs, 200));
+document.getElementById('stockSearch').addEventListener('input', debounce(renderStock, 200));
 
 // ============================================================
 // ===== CLIENT =====
@@ -1346,7 +1394,7 @@ function renderInterv(i) {
         (isTimerRunning
           ? '<button class="btn" onclick="stopTimer()">Stop</button>'
           : '<button class="btn" onclick="startTimer(\'' + escAttr(i.id) + '\')">Démarrer</button>') +
-        '<button class="btn secondary" style="width:auto;padding:13px 16px" onclick="resetTimer(\'' + escAttr(i.id) + '\')"><svg style="width:14px;height:14px"><use href="#i-refresh"/></svg></button>' +
+        '<button class="btn secondary" style="width:auto;padding:13px 16px" onclick="resetTimer(\'' + escAttr(i.id) + '\')" aria-label="RAZ chrono"><svg style="width:14px;height:14px"><use href="#i-refresh"/></svg></button>' +
       '</div>' +
     '</div>' +
     '<div class="sec-header"><h2>Pièces</h2><span class="count">' + (i.pieces || []).length + '</span></div>' +
@@ -1354,7 +1402,7 @@ function renderInterv(i) {
       ? i.pieces.map((p, idx) => '<div class="piece-row">' +
           '<div class="piece-info"><div class="piece-name">' + esc(p.name) + '</div>' + (p.note ? '<div class="piece-ref">' + esc(p.note) + '</div>' : '') + '</div>' +
           '<div class="piece-qty">' + esc(p.qty) + ' ' + esc(p.unit || '') + '</div>' +
-          '<button class="piece-del" onclick="removePiece(\'' + escAttr(i.id) + '\', ' + idx + ')"><svg><use href="#i-x"/></svg></button>' +
+          '<button class="piece-del" onclick="removePiece(\'' + escAttr(i.id) + '\', ' + idx + ')" aria-label="Retirer"><svg><use href="#i-x"/></svg></button>' +
         '</div>').join('')
       : '<div style="padding:20px;text-align:center;color:var(--text-mute);font-size:12px">Aucune pièce</div>') +
     '<button class="btn secondary" style="margin-top:6px" onclick="openAddPiece(\'' + escAttr(i.id) + '\')">+ Ajouter une pièce</button>' +
@@ -1398,7 +1446,7 @@ async function fillPhotosGrid(i) {
     const url = await photoLoad(ref);
     if (!url) return '';
     trackUrl(url);
-    return '<div class="photo-item"><img src="' + url + '"><button class="del" onclick="removePhoto(\'' + escAttr(i.id) + '\', ' + idx + ')">×</button></div>';
+    return '<div class="photo-item"><img src="' + url + '" alt="Photo intervention"><button class="del" onclick="removePhoto(\'' + escAttr(i.id) + '\', ' + idx + ')" aria-label="Supprimer la photo">×</button></div>';
   }));
   grid.innerHTML = photosHtml.join('') + '<div class="photo-add" onclick="openPhotos(\'' + escAttr(i.id) + '\')"><svg><use href="#i-camera"/></svg><span>Ajouter</span></div>';
 }
@@ -1605,7 +1653,7 @@ async function renderPhotosSheet() {
     const url = await photoLoad(ref);
     if (!url) return '';
     trackUrl(url);
-    return '<div class="photo-item"><img src="' + url + '"><button class="del" onclick="removePhotoSheet(' + idx + ')">×</button></div>';
+    return '<div class="photo-item"><img src="' + url + '" alt="Photo"><button class="del" onclick="removePhotoSheet(' + idx + ')" aria-label="Supprimer">×</button></div>';
   }));
   document.getElementById('photosGrid').innerHTML = html.join('');
 }
@@ -1807,14 +1855,12 @@ async function submitNew(e) {
   const type = document.getElementById('fType').value;
   if (!client || !type) return;
 
-  // 1. Fermer l'intervention en cours s'il y en a une
   const live = getLiveInterv();
   if (live) {
     live.status = 'termine';
     live.completedAt = new Date().toISOString();
   }
 
-  // 2. Créer la nouvelle
   const now = new Date().toISOString();
   const newId = uid();
   interventions.unshift({
@@ -1829,20 +1875,16 @@ async function submitNew(e) {
   clientMeta[client].phone = document.getElementById('fPhone').value.trim() || clientMeta[client].phone || '';
   clientMeta[client].address = document.getElementById('fAddress').value.trim() || clientMeta[client].address || '';
 
-  // 3. Sauvegarder
   await persist();
 
-  // 4. Fermer les sheets + rafraîchir home
   closeSheets();
   renderHome();
 
-  // 5. Reset le formulaire
   e.target.reset();
 
   haptic(30);
   toast(live ? '✓ Ancienne terminée · Nouvelle démarrée' : '✓ Intervention démarrée', 'success');
 
-  // 6. Ouvrir directement la nouvelle intervention
   currentClient = client;
   openInterv(newId, 'home');
 }
@@ -1918,16 +1960,23 @@ function openDoc(id) {
 }
 
 // ============================================================
-// ===== STOCK =====
+// ===== STOCK (avec recherche) =====
 // ============================================================
 function renderStock() {
+  const q = (document.getElementById('stockSearch').value || '').toLowerCase().trim();
+  let list = stock;
+  if (q) list = list.filter(s =>
+    (s.name || '').toLowerCase().includes(q) ||
+    (s.ref || '').toLowerCase().includes(q) ||
+    (s.cat || '').toLowerCase().includes(q)
+  );
   const el = document.getElementById('stockContent');
-  if (!stock.length) {
-    el.innerHTML = '<div class="empty"><svg><use href="#i-package"/></svg><p>Stock vide</p></div>';
+  if (!list.length) {
+    el.innerHTML = '<div class="empty"><svg><use href="#i-package"/></svg><p>' + (q ? 'Aucun résultat' : 'Stock vide') + '</p></div>';
     return;
   }
   const grouped = {};
-  stock.forEach(s => { (grouped[s.cat] = grouped[s.cat] || []).push(s); });
+  list.forEach(s => { (grouped[s.cat] = grouped[s.cat] || []).push(s); });
   el.innerHTML = Object.entries(grouped).map(([cat, items]) =>
     '<div class="sec-header"><h2>' + esc(cat) + '</h2><span class="count">' + items.length + '</span></div>' +
     items.map(s => {
@@ -2047,7 +2096,11 @@ function toggleVoice(targetId, btn) {
 // ============================================================
 // ===== UTILS =====
 // ============================================================
-function callPhone(p) { if (p) window.location.href = 'tel:' + p.replace(/\s/g, ''); }
+function callPhone(p) {
+  if (!p) return;
+  const clean = p.replace(/[^\d+]/g, '');
+  window.location.href = 'tel:' + clean;
+}
 function openMaps(a) { if (a) window.open('https://maps.apple.com/?q=' + encodeURIComponent(a), '_blank'); }
 
 // ============================================================
@@ -2097,7 +2150,7 @@ async function exportData() {
     }
     return copy;
   }));
-  const data = {version: 12, exportedAt: new Date().toISOString(), interventions: exportIntervs, favorites, settings, stock, clientMeta};
+  const data = {version: 12, appVersion: APP_VERSION, exportedAt: new Date().toISOString(), interventions: exportIntervs, favorites, settings, stock, clientMeta};
   const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2120,6 +2173,7 @@ async function importData(e) {
         settings = data.settings || settings;
         stock = data.stock || [];
         clientMeta = data.clientMeta || {};
+        invalidateIndex();
         await persist();
         renderHome();
         closeSheets();
@@ -2143,6 +2197,7 @@ function clearAll() {
     localStorage.clear();
     interventions = []; favorites = []; stock = []; clientMeta = {};
     settings = {name: '', company: ''};
+    invalidateIndex();
     renderHome();
     closeSheets();
     toast('Données effacées', 'error');
@@ -2153,6 +2208,7 @@ function clearAll() {
 // ===== PERSIST =====
 // ============================================================
 async function persist() {
+  invalidateIndex();
   await Promise.all([
     dbSet('interventions', interventions),
     dbSet('favorites', favorites),
@@ -2168,7 +2224,6 @@ async function loadAll() {
   stock = (await dbGet('stock')) || [];
   clientMeta = (await dbGet('clientMeta')) || {};
   if (!interventions.length && !stock.length) loadDemo();
-  // Sécurité : une seule en cours
   const liveList = interventions.filter(i => i.status === 'en-cours');
   if (liveList.length > 1) {
     liveList.sort((a,b) => new Date(b.date || b.created) - new Date(a.date || a.created));
@@ -2177,6 +2232,7 @@ async function loadAll() {
       if (!liveList[k].completedAt) liveList[k].completedAt = new Date().toISOString();
     }
   }
+  invalidateIndex();
 }
 function loadDemo() {
   stock = DEMO_STOCK.map(s => ({...s}));
