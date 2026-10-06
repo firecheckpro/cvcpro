@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CVC Pro">
@@ -25,6 +25,7 @@
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --touch-min: 44px;
+    --nav-height: 52px;
   }
   html[data-theme="light"] {
     --bg: #e8ecf1;
@@ -41,11 +42,11 @@
     --warning: #8a5a1a;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
-  html, body { height: 100%; overflow-x: hidden; }
+  html, body { height: 100%; overflow-x: hidden; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
     background: var(--bg); color: var(--text);
-    padding-bottom: calc(64px + var(--safe-bottom));
+    padding-bottom: calc(var(--nav-height) + var(--safe-bottom));
     font-size: 14px; line-height: 1.4;
   }
   .app { max-width: 500px; margin: 0 auto; padding: 0 12px; }
@@ -146,12 +147,12 @@
   .empty svg { width: 36px; height: 36px; stroke: var(--text-mute); margin: 0 auto 10px; opacity: 0.6; }
   .empty p { font-size: 13px; color: var(--text-dim); }
 
-  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-2); border-top: 1px solid var(--border); padding: 4px 8px calc(4px + var(--safe-bottom)); display: flex; justify-content: space-around; align-items: center; z-index: 100; max-width: 500px; margin: 0 auto; }
-  .nav-btn { background: none; border: none; color: var(--text-mute); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 4px; cursor: pointer; font-family: inherit; flex: 1; min-height: var(--touch-min); }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-2); border-top: 1px solid var(--border); padding: 2px 6px calc(2px + var(--safe-bottom)); display: flex; justify-content: space-around; align-items: center; z-index: 100; max-width: 500px; margin: 0 auto; height: calc(var(--nav-height) + var(--safe-bottom)); }
+  .nav-btn { background: none; border: none; color: var(--text-mute); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 2px; cursor: pointer; font-family: inherit; flex: 1; min-height: 40px; }
   .nav-btn.active { color: var(--accent); }
-  .nav-btn svg { width: 18px; height: 18px; }
-  .nav-lbl { font-size: 9px; font-weight: 600; margin-top: 1px; }
-  .nav-btn.center svg { background: var(--accent); border-radius: 8px; padding: 6px; width: 30px; height: 30px; stroke: white; stroke-width: 2.2; margin-top: 0; transition: transform 0.15s; }
+  .nav-btn svg { width: 17px; height: 17px; }
+  .nav-lbl { font-size: 8.5px; font-weight: 600; margin-top: 1px; line-height: 1; }
+  .nav-btn.center svg { background: var(--accent); border-radius: 8px; padding: 5px; width: 28px; height: 28px; stroke: white; stroke-width: 2.2; margin-top: 0; transition: transform 0.15s; }
   .nav-btn.center:active svg { transform: scale(0.9); }
 
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
@@ -168,10 +169,10 @@
 
   .field { margin-bottom: 11px; }
   .field label { display: block; font-size: 10.5px; font-weight: 600; color: var(--text-dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .field input, .field select, .field textarea { width: 100%; padding: 11px 12px; min-height: var(--touch-min); background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit; -webkit-appearance: none; appearance: none; }
+  .field input, .field select, .field textarea { width: 100%; padding: 11px 12px; min-height: var(--touch-min); background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 16px; font-family: inherit; -webkit-appearance: none; appearance: none; }
   .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%237d8798' d='M6 8L2 4h8z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
   .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
-  .field textarea { resize: vertical; min-height: 70px; }
+  .field textarea { resize: vertical; min-height: 70px; font-size: 16px; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .field-textarea-wrap { position: relative; }
   .voice-btn { position: absolute; right: 8px; top: 8px; width: 36px; height: 36px; min-width: 36px; border-radius: 7px; background: var(--bg-2); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
@@ -335,10 +336,10 @@
   .finish-row span:first-child { color: var(--text-dim); }
   .finish-row strong { color: var(--accent); }
 
-  #sheet-notes textarea { width: 100%; min-height: 140px; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit; resize: vertical; }
+  #sheet-notes textarea { width: 100%; min-height: 140px; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 16px; font-family: inherit; resize: vertical; }
 
   .check-edit-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--card); border: 1px solid var(--border-soft); border-radius: 8px; margin-bottom: 5px; }
-  .check-edit-item input { flex: 1; padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; font-family: inherit; }
+  .check-edit-item input { flex: 1; padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 16px; font-family: inherit; }
   .check-edit-del { background: none; border: none; color: var(--danger); font-size: 16px; cursor: pointer; min-width: 32px; min-height: 32px; padding: 0; }
   .check-edit-add { background: none; border: 1.5px dashed var(--border); color: var(--accent); font-size: 12.5px; font-weight: 600; padding: 10px; border-radius: 8px; cursor: pointer; font-family: inherit; width: 100%; min-height: 40px; }
 
@@ -447,6 +448,7 @@
       <button class="back-btn" onclick="go('home')" aria-label="Retour"><svg><use href="#i-back"/></svg></button>
       <h2 id="clientTitle">Client</h2>
       <button class="fav-btn" id="clientFavBtn" onclick="toggleFavClient()" aria-label="Favori"><svg><use href="#i-star"/></svg></button>
+      <button class="icon-btn" id="clientDeleteBtn" onclick="deleteClient()" aria-label="Supprimer le client" style="color:var(--danger)"><svg><use href="#i-trash"/></svg></button>
     </div>
     <div id="clientContent"></div>
   </div>
@@ -1267,8 +1269,13 @@ async function saveManualTime() {
 // ============================================================
 // ===== NAV =====
 // ============================================================
+let _historyStack = [];
 function go(view) {
   revokeUrls();
+  if (view !== 'home') {
+    _historyStack.push(view);
+    history.pushState({view}, '', '#' + view);
+  }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const el = document.getElementById('view-' + view);
   if (el) el.classList.add('active');
@@ -1281,9 +1288,28 @@ function goStock() { go('stock'); renderStock(); }
 function goStats() { closeSheets(); go('stats'); renderStats(); }
 function goSearch() { go('search'); renderGlobalSearch(); setTimeout(() => document.getElementById('globalSearch').focus(), 100); }
 
+// Fermeture cohérente : bouton retour navigateur/Android
+window.addEventListener('popstate', (e) => {
+  // Si des sheets sont ouverts, les fermer
+  if (document.querySelector('.sheet.show')) {
+    closeSheets();
+    return;
+  }
+  // Sinon revenir à l'accueil
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = e.state && e.state.view ? e.state.view : 'home';
+  const el = document.getElementById('view-' + target);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === target));
+});
+
 function closeSheets() {
   document.getElementById('overlay').classList.remove('show');
   document.querySelectorAll('.sheet').forEach(s => s.classList.remove('show'));
+  document.getElementById('confirmOverlay').classList.remove('show');
+  document.getElementById('confirmModal').classList.remove('show');
+  document.getElementById('finishOverlay').classList.remove('show');
+  document.getElementById('finishModal').classList.remove('show');
   unlockBodyScroll();
 }
 function openSheet(id) {
@@ -1845,6 +1871,40 @@ async function toggleFavClient() {
   await persist();
   document.getElementById('clientFavBtn').classList.toggle('active');
   renderHome();
+}
+
+// ============================================================
+// ===== SUPPRESSION CLIENT =====
+// ============================================================
+function deleteClient() {
+  if (!currentClient) return;
+  const name = currentClient;
+  const clientIntervs = interventions.filter(i => i.client === name);
+  const msg = clientIntervs.length
+    ? 'Supprimer "' + name + '" et ses ' + clientIntervs.length + ' intervention(s) ? Cette action est irréversible.'
+    : 'Supprimer "' + name + '" ?';
+  confirmAction('Supprimer le client', msg, async () => {
+    // Supprimer les photos associées
+    for (const i of clientIntervs) {
+      for (const p of (i.photos || [])) {
+        const ref = p && p.ref ? p.ref : p;
+        if (ref && ref.startsWith && ref.startsWith('idb:')) await photoDelete(ref);
+      }
+    }
+    // Supprimer les interventions du client
+    interventions = interventions.filter(i => i.client !== name);
+    // Supprimer les métadonnées client
+    delete clientMeta[name];
+    // Supprimer des favoris
+    favorites = favorites.filter(f => f !== 'c-' + name);
+    invalidateIndex();
+    await persist();
+    currentClient = null;
+    go('home');
+    renderHome();
+    toast('Client supprimé', 'success');
+    haptic(20);
+  }, 'Supprimer');
 }
 
 // ============================================================
