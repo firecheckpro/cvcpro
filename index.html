@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CVC Pro">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#141a25">
 <title>CVC Pro</title>
 
 <link rel="apple-touch-icon" href="logo.png">
@@ -42,12 +42,20 @@
     --warning: #8a5a1a;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
-  html, body { height: 100%; overflow-x: hidden; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+  html {
+    background: var(--bg-2);
+    height: 100%;
+    overflow-x: hidden;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
     background: var(--bg); color: var(--text);
-    padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 4px);
+    min-height: 100%;
+    padding-bottom: calc(var(--nav-height) + var(--safe-bottom));
     font-size: 14px; line-height: 1.4;
+    overflow-x: hidden;
   }
   .app { max-width: 500px; margin: 0 auto; padding: 0 12px; }
   svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -152,13 +160,15 @@
     bottom: 0; left: 0; right: 0;
     background: var(--bg-2);
     border-top: 1px solid var(--border);
-    padding: 0 4px var(--safe-bottom);
+    padding: 0 4px;
+    padding-bottom: var(--safe-bottom);
     display: flex;
     justify-content: space-around;
     align-items: stretch;
     z-index: 100;
     max-width: 500px;
     margin: 0 auto;
+    height: calc(var(--nav-height) + var(--safe-bottom));
   }
   .nav-btn {
     background: none; border: none;
@@ -185,11 +195,34 @@
 
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
   .overlay.show { opacity: 1; pointer-events: auto; }
+
   .sheet { position: fixed; left: 0; right: 0; bottom: 0; background: var(--bg); border-radius: 18px 18px 0 0; padding: 16px 16px calc(24px + var(--safe-bottom)); max-height: 92vh; overflow-y: auto; z-index: 201; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); max-width: 500px; margin: 0 auto; border-top: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
   .sheet.show { transform: translateY(0); }
   .sheet-handle { width: 32px; height: 3px; background: var(--border); border-radius: 2px; margin: 0 auto 14px; }
   .sheet h2 { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
   .sheet-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 14px; }
+
+  /* Bouton fermeture sheet */
+  .sheet-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    padding: 0;
+  }
+  .sheet-close svg { width: 16px; height: 16px; }
+  .sheet-close:active { transform: scale(0.94); background: var(--bg-2); }
+  .sheet { position: fixed; }
+  .sheet > .sheet-close { position: absolute; }
 
   .warn-banner { background: rgba(217,155,74,0.12); border: 1px solid rgba(217,155,74,0.35); border-left: 2.5px solid var(--warning); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px; font-size: 12.5px; color: var(--text); line-height: 1.5; }
   html[data-theme="light"] .warn-banner { background: rgba(217,155,74,0.10); color: #7a4f14; }
@@ -266,7 +299,6 @@
   .check-label { flex: 1; font-size: 13px; }
   .check-item.checked .check-label { color: var(--text-dim); text-decoration: line-through; }
 
-  /* ===== TEMPS MANUEL ===== */
   .time-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 11px; padding: 14px; }
   .time-display { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); text-align: center; margin: 2px 0 12px; }
   .time-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
@@ -590,6 +622,7 @@
 
 <!-- ===== SHEET NEW ===== -->
 <div class="sheet" id="sheet-new">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2 id="newTitle">Nouvelle intervention</h2>
   <p class="sheet-sub" id="newSub">Chez quel client ?</p>
@@ -635,6 +668,7 @@
 
 <!-- ===== SHEET EDIT ===== -->
 <div class="sheet" id="sheet-edit">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Modifier</h2>
   <form onsubmit="submitEdit(event)">
@@ -666,6 +700,7 @@
 
 <!-- ===== SHEET PIECE ===== -->
 <div class="sheet" id="sheet-piece">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Ajouter une pièce</h2>
   <div class="field">
@@ -688,6 +723,7 @@
 
 <!-- ===== SHEET ANOMALY ===== -->
 <div class="sheet" id="sheet-anomaly">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Ajouter une anomalie</h2>
   <div class="field">
@@ -713,6 +749,7 @@
 
 <!-- ===== SHEET PHOTOS ===== -->
 <div class="sheet" id="sheet-photos">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Photos</h2>
   <p class="sheet-sub">Tag chaque photo pour structurer ton rapport.</p>
@@ -733,6 +770,7 @@
 
 <!-- ===== SHEET MEASURES ===== -->
 <div class="sheet" id="sheet-measures">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Mesures</h2>
   <div class="panel"><h3>Frigorifique</h3>
@@ -756,6 +794,7 @@
 
 <!-- ===== SHEET SETTINGS ===== -->
 <div class="sheet" id="sheet-settings">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Réglages</h2>
   <div class="panel">
@@ -787,10 +826,12 @@
     <h3>À propos</h3>
     <p style="font-size:12px;color:var(--text-dim)">CVC Pro v13.0 — Données stockées localement (aucun cloud).</p>
   </div>
+  <button class="btn secondary" style="margin-top:6px" onclick="closeSheets()">Fermer</button>
 </div>
 
 <!-- ===== SHEET STOCK ===== -->
 <div class="sheet" id="sheet-stock">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Ajouter au stock</h2>
   <form onsubmit="submitStock(event)">
@@ -809,6 +850,7 @@
 </div>
 
 <div class="sheet" id="sheet-stock-edit">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Ajuster</h2>
   <p class="sheet-sub" id="stockEditName">—</p>
@@ -825,6 +867,7 @@
 
 <!-- ===== SHEET NOTES CLIENT ===== -->
 <div class="sheet" id="sheet-notes">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Notes client</h2>
   <p class="sheet-sub" id="notesClientName">—</p>
@@ -837,6 +880,7 @@
 
 <!-- ===== SHEET TEMPS ===== -->
 <div class="sheet" id="sheet-time">
+  <button class="sheet-close" onclick="closeSheets()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>Temps passé</h2>
   <p class="sheet-sub" id="timeIntervName">—</p>
@@ -868,6 +912,7 @@
 <!-- ===== FIN MODAL ===== -->
 <div class="overlay" id="finishOverlay" onclick="closeFinishModal()"></div>
 <div class="sheet" id="finishModal" style="max-height:auto">
+  <button class="sheet-close" onclick="closeFinishModal()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2>✓ Intervention terminée</h2>
   <p class="sheet-sub" id="finishSub">—</p>
@@ -881,6 +926,7 @@
 <!-- ===== CONFIRM ===== -->
 <div class="overlay" id="confirmOverlay" onclick="closeConfirm()"></div>
 <div class="sheet" id="confirmModal" style="max-height:auto">
+  <button class="sheet-close" onclick="closeConfirm()" aria-label="Fermer"><svg><use href="#i-x"/></svg></button>
   <div class="sheet-handle"></div>
   <h2 id="confirmTitle">Confirmation</h2>
   <p class="sheet-sub" id="confirmMsg">—</p>
@@ -1181,7 +1227,6 @@ function fmtTime(iso) {
   if (isNaN(d.getTime())) return '';
   return d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
 }
-// timeSpent est maintenant en SECONDES
 function fmtDurShort(sec) {
   if (!sec || sec <= 0) return '—';
   const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
@@ -1308,7 +1353,6 @@ function quickAddTime(minutes) {
   updateTimeDisplay();
   haptic(8);
 }
-// listeners pour maj live du display
 document.getElementById('timeHours').addEventListener('input', updateTimeDisplay);
 document.getElementById('timeMinutes').addEventListener('input', updateTimeDisplay);
 
@@ -1343,12 +1387,10 @@ function goSearch() { go('search'); renderGlobalSearch(); setTimeout(() => docum
 
 // Fermeture cohérente : bouton retour navigateur/Android
 window.addEventListener('popstate', () => {
-  // Si des sheets sont ouverts, les fermer
   if (document.querySelector('.sheet.show')) {
     closeSheets();
     return;
   }
-  // Sinon revenir à l'accueil
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-home').classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === 'home'));
@@ -2026,7 +2068,6 @@ function renderInterv(i) {
     (!done
       ? '<button class="btn success" style="margin-bottom:10px" onclick="finishInterv(\'' + escAttr(i.id) + '\')">✓ Terminer</button>'
       : '<button class="btn secondary" style="margin-bottom:10px" onclick="reopenInterv(\'' + escAttr(i.id) + '\')">↩ Rouvrir</button>') +
-    // ===== TEMPS MANUEL =====
     '<div class="sec-header"><h2>Temps passé</h2><span class="count">' + (i.timeSpent ? fmtDurShort(i.timeSpent) : 'non renseigné') + '</span></div>' +
     '<div class="time-card">' +
       '<div class="time-display">' + fmtHoursMinutes(i.timeSpent || 0) + '</div>' +
@@ -2811,7 +2852,6 @@ async function printInterv() {
   if (!i) return;
   closeFinishModal();
 
-  // Charger les photos en dataURL (base64) pour qu'elles s'impriment
   const photos = [];
   for (const p of (i.photos || [])) {
     const ref = p.ref || p;
@@ -2819,7 +2859,6 @@ async function printInterv() {
     if (ref && ref.startsWith && ref.startsWith('data:')) {
       dataUrl = ref;
     } else if (ref && ref.startsWith && ref.startsWith('idb:') && db) {
-      // Charger le blob depuis IndexedDB et le convertir en base64
       try {
         const blob = await new Promise(res => {
           const req = db.transaction('photos', 'readonly').objectStore('photos').get(ref.slice(4));
@@ -2933,7 +2972,6 @@ const PRINT_CSS = `
 `;
 
 function printHtmlViaIframe(html) {
-  // Créer un iframe caché
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';
   iframe.style.right = '0';
@@ -2950,7 +2988,6 @@ function printHtmlViaIframe(html) {
   doc.write(html);
   doc.close();
 
-  // Attendre le chargement des images puis imprimer
   const doPrint = () => {
     try {
       iframe.contentWindow.focus();
@@ -2958,13 +2995,11 @@ function printHtmlViaIframe(html) {
     } catch(e) {
       showError('Erreur impression : ' + e.message);
     }
-    // Nettoyer après un délai (le temps que la boîte d'impression s'ouvre)
     setTimeout(() => {
       try { document.body.removeChild(iframe); } catch(e) {}
     }, 2000);
   };
 
-  // Attendre que les images soient chargées (max 3s)
   const imgs = doc.images;
   if (imgs.length === 0) {
     setTimeout(doPrint, 250);
@@ -2987,7 +3022,6 @@ function printHtmlViaIframe(html) {
       imgs[k].addEventListener('error', checkDone);
     }
   }
-  // Fallback : imprimer après 3s max
   setTimeout(() => {
     if (!done) { done = true; doPrint(); }
   }, 3000);
